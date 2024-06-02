@@ -1,6 +1,7 @@
-// import Link from "next/link"
 import * as React from "react"
-import { useState, FormEvent, ChangeEvent } from 'react';
+import { useState, FormEvent, ChangeEvent, useEffect } from 'react';
+import { useRouter } from 'next/router'
+import { useSession, startSession, LoginSchema, SignupSchema, createUser, findUser, ErrorType } from './../utils/loginAuth';
 
 import { Button } from "@/components/ui/button"
 import {
@@ -23,59 +24,52 @@ import {
     TabsList,
     TabsTrigger,
 } from "@/components/ui/tabs"
+import { IconAlertTriangle } from "@tabler/icons-react";
 
 import "@/app/globals.css"
-import { IconAlertTriangle } from "@tabler/icons-react";
-import { useRouter } from 'next/router'
-import { useEffect } from 'react';
-import { useSession, startSession, LoginSchema, SignupSchema, createUser, findUser, ErrorType } from './../utils/loginAuth';
-
 
 const Login = () => {
     const router = useRouter()
+    const session = useSession()
 
     const [msg, setMsg] = useState({ message: '' })
     const [loginData, setLoginData] = useState({ usuario: '', senha: '' });
     const [signupData, setSignupData] = useState({ usuario: '', senha: '', email : '', conf_senha: '' });
     const [error, setError] = useState<ErrorType | null>(null);
-    
+
     const useSignUp = async () =>{
-        try{
+        try {
             SignupSchema.parse(signupData)
             const data = await createUser(signupData.usuario, signupData.senha, signupData.email)
-            if (data.sucess == false || data.error) {
-                setMsg({
-                    message: data.error
-                })
+            if (data.sucess === false || data.error) {
+                setMsg({ message: data.error })
             }
-            startSession(data.data.usuario, data.data.categoria, data.data.id_login) ?  router.push("cursos/#session_started") : router.push("login/#session_error") 
-        } catch(error: any){
+            startSession(data.data.usuario, data.data.categoria, data.data.id_login) 
+                ? router.push("cursos/#session_started") 
+                : router.push("login/#session_error") 
+        } catch(error: any) {
             try {
-                setMsg({
-                    message: JSON.parse(error)[0].message
-                })
+                setMsg({ message: JSON.parse(error)[0].message })
             } catch (err) {
                 console.log(error)
             }
         }
     }
-    const useLogin = async () =>{
+
+    const useLogin = async () => {
         try {
             LoginSchema.parse(loginData);
             const data = await findUser(loginData.usuario, loginData.senha)
-            if (data.sucess == false || data.error) {
-                setMsg({
-                    message: data.error
-                })
+            if (data.sucess === false || data.error) {
+                setMsg({ message: data.error })
             }
-            startSession(data.data.usuario, data.data.categoria, data.data.id_login) ?  router.push("cursos/#session_started") : router.push("login/#session_error") 
-
+            startSession(data.data.usuario, data.data.categoria, data.data.id_login) 
+                ? router.push("cursos/#session_started") 
+                : router.push("login/#session_error") 
         } catch (error: any) {
             setError({ message: error.message, errors: error.errors });
             try {
-                setMsg({
-                    message: JSON.parse(error)[0].message
-                })
+                setMsg({ message: JSON.parse(error)[0].message })
             } catch (err) {
                 console.log(error)
             }
@@ -83,14 +77,12 @@ const Login = () => {
     }
 
     useEffect(() => {
-        var session = useSession()
-
-        if(session.sucess == true){
+        if (session.sucess === true) {
             router.push("cursos/#session_started")
         } else {
             router.push("login/")
         }
-      }, []);
+    }, [session, router]);
 
     const LoginSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -99,7 +91,7 @@ const Login = () => {
 
     const SignupSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-       await useSignUp()
+        await useSignUp()
     };
 
     const inputMudado_Login = (e: ChangeEvent<HTMLInputElement>) => {
@@ -192,7 +184,6 @@ const Login = () => {
                     </TabsContent>
                 </Tabs>
             </div>
-
         </div>
     );
 };
