@@ -82,15 +82,15 @@ const Login = () => {
         }
     }
 
-    // useEffect(() => {
-    //     var session = useSession()
+    useEffect(() => {
+        var session = useSession()
 
-    //     if(session.sucess == true){
-    //         router.push("cursos/#session_started")
-    //     } else {
-    //         router.push("login/")
-    //     }
-    //   }, []);
+        if(session.sucess == true){
+            router.push("cursos/#session_started")
+        } else {
+            router.push("login/")
+        }
+      }, []);
 
     const LoginSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
