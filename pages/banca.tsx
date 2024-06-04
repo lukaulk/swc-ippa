@@ -36,12 +36,26 @@ import { useSession } from "../utils/loginAuth"
 import Selector from "@/components/myui/Selector"
 import { tfcFunc } from "../utils/tfcUtils";
 import { BancaFunc, bancaSchema } from '../utils/bancaUtils'
+
 export default function Banca(){
     const { data: sessionData } = useSession();
     const uid = sessionData ? sessionData.uid : 0;
 
     const [isDialogOpen, setIsDialogOpen] = useState(false)
-    const [banca, setBanca] = useState({ titulo_id: "", data: "", hora_inicio: "", hora_fim: "", local: "", presidente: "", vogal1: "", vogal2: "", usuario_id: "" })
+    const [banca, setBanca] = useState(
+        { 
+        tfc_id: "",
+        data: "", 
+        hora_inicio: "", 
+        hora_fim: "", 
+        local: "", 
+        presidente: "", 
+        vogal1: "", 
+        vogal2: "", 
+        usuario_id:  ""})
+
+    setBanca({ ...banca, usuario_id : String(uid) })
+    
     const [tfc, setTFC] = useState({ id: ""})
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -68,11 +82,12 @@ export default function Banca(){
         };
         fetchProf();
     }, [uid]);
+
     const selectItems = (items: Array<{ id: number; titulo: string }>, e: React.ChangeEvent<HTMLInputElement>) =>{
         const { name } = e.target;
-        console.log("Itens selecionados:", items);
-        console.log("Evento:", name);
+        setBanca(banca => ({ ...banca, [name]: String(items[0].id) }));
     }
+
     useEffect(() => {
         const fetchTFC = async () => {
             try {
@@ -94,9 +109,11 @@ export default function Banca(){
         fetchTFC();
 
     }, [uid]);
+    
     const bancaMudado = (e: ChangeEvent<HTMLInputElement>) => {
         setBanca({ ...banca, [e.target.name]: e.target.value });
     };
+
     const bancaSelect = (e: ChangeEvent<HTMLSelectElement>) => {
         setBanca({ ...banca, [e.target.name]: e.target.value });
     };
@@ -124,14 +141,6 @@ export default function Banca(){
                     <header className="flex mt-4 ml-6 gap-2">
                                 <Input type="search" placeholder="Pesquisar Bancas..." className="w-[300px] border-slate-400 focus:outline-violet-400 border placeholder:text-slate-500 bg-slate-200" />
                                 <Button className="mb-2 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" ><IconSearch stroke={"white"} className="w-4 mr-2 h-4 rounded-none" strokeWidth={3} /> Pesquisar</Button>
-                                {/* <Popover>
-                                    <PopoverTrigger asChild>
-                                        <Button className="mb-2 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200">
-                                            <IconFilter stroke={"white"} className="w-4 mr-2 h-4 rounded-none" strokeWidth={3} /> Filtrar
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="flex p-0 flex-col bg-white w-fit items-start"></PopoverContent>
-                                </Popover> */}
                             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                                 <DialogTrigger asChild>
                                     <Button className="bg-violet-700 mb-2 text-white hover:bg-violet-800" onClick={() => setIsDialogOpen(true)} ><IconPlus stroke={"white"} className="w-4 mr-2 h-4 rounded-none" strokeWidth={3} /> adicionar Banca</Button>
@@ -153,12 +162,11 @@ export default function Banca(){
                                                <div className="flex gap-8">
                                                     <fieldset className="flex flex-1 p-4 flex-col gap-2 border-gray-300 border rounded-md pl-8">
                                                             <legend className="font-semibold">Membros da banca</legend>
-                                                       
                                                             <Label>Presidente: 
                                                             {loading ? (
                                                                     <span className="w-full ml-4 text-gray-700 text-center">Carregando professores...</span>
                                                                 ) : error.trim() !== "" ? (<span className="w-full ml-4 text-red-700 font-semibold text-center">Nenhum professor</span>) 
-                                                                : (<select className="px-4 py-2 ml-4 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" name="presidente" value={banca.presidente} onChange={bancaSelect}>
+                                                                : (<select className="px-4 py-2 ml-4 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" name="presidente" value={banca.presidente} onInput={bancaSelect}>
                                                                         {prof.map((dados, index) => (
                                                                             <option key={index} value={dados.id} >{dados.nome}</option>
                                                                         ))}
@@ -169,7 +177,7 @@ export default function Banca(){
                                                             {loading ? (
                                                                     <span className="w-full text-gray-700 text-center ml-4">Carregando professores...</span>
                                                                 ) : error.trim() !== "" ? (<span className="w-full ml-4 text-red-700 font-semibold text-center">Nenhum professor</span>) 
-                                                                : (<select className="px-4 py-2 ml-8 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" name="vogal1" value={banca.vogal1} onChange={bancaSelect}>
+                                                                : (<select className="px-4 py-2 ml-8 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" name="vogal1" value={banca.vogal1} onInput={bancaSelect}>
                                                                         {prof.map((dados, index) => (
                                                                             <option key={index} value={dados.id} >{dados.nome}</option>
                                                                         ))}
@@ -180,7 +188,7 @@ export default function Banca(){
                                                             {loading ? (
                                                                     <span className="w-full text-gray-700 text-center">Carregando professores...</span>
                                                                 ) : error.trim() !== "" ? (<span className="w-full text-red-700 font-semibold text-center">Nenhum professor</span>) 
-                                                                : (<select className="px-4 ml-8 py-2 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" name="vogal2" value={banca.vogal2} onChange={bancaSelect}>
+                                                                : (<select className="px-4 ml-8 py-2 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" name="vogal2" value={banca.vogal2} onInput={bancaSelect}>
                                                                         {prof.map((dados, index) => (
                                                                             <option key={index} value={dados.id} >{dados.nome}</option>
                                                                         ))}
@@ -191,7 +199,6 @@ export default function Banca(){
                                                     <fieldset className="flex flex-1 p-4 flex-col gap-4 border-gray-300 border rounded-md pl-8">
                                                             <legend className="font-semibold">Autor (es):</legend>
                                                             <span>Aluno</span>
-                                                            
                                                     </fieldset>
                                                </div>
                                                <div className="flex gap-4">
@@ -264,7 +271,6 @@ export default function Banca(){
                             </TableBody>
                         </Table>
                     </ScrollArea>
-                    
                 </section>
             </div>
         </div>

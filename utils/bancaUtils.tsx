@@ -13,13 +13,12 @@ export interface IBancaFunc {
 }
 
 export const BancaFunc: IBancaFunc = {
-    async create(titulo_id, data, hora_inicio, hora_fim, local, presidente, vogal1, vogal2, tfc_id, usuario_id) {
+    async create(data, hora_inicio, hora_fim, local, presidente, vogal1, vogal2, tfc_id, usuario_id) {
         try {
             const response = await fetch('api/banca', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    titulo_id: Number(titulo_id),
                     data: new Date(data).toISOString(), 
                     hora_inicio: hora_inicio,
                     hora_fim: hora_fim,

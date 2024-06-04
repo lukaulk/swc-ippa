@@ -4,7 +4,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'POST') {
         try {
             const {
-                titulo_id,
                 data,
                 hora_inicio,
                 hora_fim,
@@ -18,7 +17,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             const dados = await prisma.banca.create({
                 data: {
-                    titulo_id: Number(titulo_id),
                     data: new Date(data).toISOString(),
                     hora_inicio: hora_inicio,
                     hora_fim: hora_fim,
