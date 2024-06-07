@@ -166,7 +166,7 @@ export default function Banca(){
                                                             {loading ? (
                                                                     <span className="w-full ml-4 text-gray-700 text-center">Carregando professores...</span>
                                                                 ) : error.trim() !== "" ? (<span className="w-full ml-4 text-red-700 font-semibold text-center">Nenhum professor</span>) 
-                                                                : (<select className="px-4 py-2 ml-4 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" name="presidente" value={banca.presidente} onInput={bancaSelect}>
+                                                                : (<select className="px-4 py-2 ml-4 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" name="presidente" value={banca.presidente} onSelect={bancaSelect}>
                                                                         {prof.map((dados, index) => (
                                                                             <option key={index} value={dados.id} >{dados.nome}</option>
                                                                         ))}
@@ -177,7 +177,7 @@ export default function Banca(){
                                                             {loading ? (
                                                                     <span className="w-full text-gray-700 text-center ml-4">Carregando professores...</span>
                                                                 ) : error.trim() !== "" ? (<span className="w-full ml-4 text-red-700 font-semibold text-center">Nenhum professor</span>) 
-                                                                : (<select className="px-4 py-2 ml-8 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" name="vogal1" value={banca.vogal1} onInput={bancaSelect}>
+                                                                : (<select className="px-4 py-2 ml-8 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" name="vogal1" value={banca.vogal1} onSelect={bancaSelect}>
                                                                         {prof.map((dados, index) => (
                                                                             <option key={index} value={dados.id} >{dados.nome}</option>
                                                                         ))}
@@ -188,7 +188,7 @@ export default function Banca(){
                                                             {loading ? (
                                                                     <span className="w-full text-gray-700 text-center">Carregando professores...</span>
                                                                 ) : error.trim() !== "" ? (<span className="w-full text-red-700 font-semibold text-center">Nenhum professor</span>) 
-                                                                : (<select className="px-4 ml-8 py-2 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" name="vogal2" value={banca.vogal2} onInput={bancaSelect}>
+                                                                : (<select className="px-4 ml-8 py-2 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" name="vogal2" value={banca.vogal2} onSelect={bancaSelect}>
                                                                         {prof.map((dados, index) => (
                                                                             <option key={index} value={dados.id} >{dados.nome}</option>
                                                                         ))}
