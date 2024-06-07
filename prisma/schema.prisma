@@ -14,7 +14,6 @@ model login {
   categoria String      @db.VarChar(200)
   email     String      @unique @db.VarChar(200)
   aluno     aluno[]
-  banca     banca[]
   curso     curso[]
   professor professor[]
   team      team[]
@@ -36,30 +35,22 @@ model aluno {
 }
 
 model banca {
-  id                                    Int       @id @default(autoincrement())
-  titulo_id                             Int
-  data                                  DateTime? @db.Date
-  hora_inicio                           String?   @db.VarChar(10)
-  hora_fim                              String?   @db.VarChar(10)
-  local                                 String?   @db.VarChar(200)
-  presidente                            Int
-  vogal1                                Int
-  vogal2                                Int
-  tfc_id                                Int?
-  usuario_id                            Int?
-  tfc                                   tfc?      @relation(fields: [tfc_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "banca_ibfk_1")
-  login                                 login?    @relation(fields: [usuario_id], references: [id_login], onDelete: Cascade, onUpdate: Restrict, map: "banca_ibfk_2")
-  professor_banca_presidenteToprofessor professor @relation("banca_presidenteToprofessor", fields: [presidente], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "banca_ibfk_3")
-  professor_banca_vogal1Toprofessor     professor @relation("banca_vogal1Toprofessor", fields: [vogal1], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "banca_ibfk_4")
-  professor_banca_vogal2Toprofessor     professor @relation("banca_vogal2Toprofessor", fields: [vogal2], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "banca_ibfk_5")
-  professor_banca_titulo_idToprofessor  professor @relation("banca_titulo_idToprofessor", fields: [titulo_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "banca_ibfk_6")
+  id          Int       @id @default(autoincrement())
+  data        DateTime? @db.Date
+  hora_inicio String?   @db.VarChar(10)
+  hora_fim    String?   @db.VarChar(10)
+  local       String?   @db.VarChar(200)
+  presidente  Int
+  vogal1      Int
+  vogal2      Int
+  tfc_id      Int
+  usuario_id  Int
 
   @@index([tfc_id], map: "tfc_id")
   @@index([usuario_id], map: "usuario_id")
   @@index([presidente], map: "banca_ibfk_3")
   @@index([vogal1], map: "banca_ibfk_4")
   @@index([vogal2], map: "banca_ibfk_5")
-  @@index([titulo_id], map: "banca_ibfk_6")
 }
 
 model curso {
@@ -74,19 +65,14 @@ model curso {
 }
 
 model professor {
-  id                                Int     @id @default(autoincrement())
-  nome                              String? @db.VarChar(200)
-  descricao                         String? @db.VarChar(200)
-  usuario_id                        Int?
-  banca_banca_presidenteToprofessor banca[] @relation("banca_presidenteToprofessor")
-  banca_banca_vogal1Toprofessor     banca[] @relation("banca_vogal1Toprofessor")
-  banca_banca_vogal2Toprofessor     banca[] @relation("banca_vogal2Toprofessor")
-  banca_banca_titulo_idToprofessor  banca[] @relation("banca_titulo_idToprofessor")
-  login                             login?  @relation(fields: [usuario_id], references: [id_login], onDelete: Cascade, onUpdate: Restrict, map: "professor_ibfk_1")
+  id         Int     @id @default(autoincrement())
+  nome       String? @db.VarChar(200)
+  descricao  String? @db.VarChar(200)
+  usuario_id Int?
+  login      login?  @relation(fields: [usuario_id], references: [id_login], onDelete: Cascade, onUpdate: Restrict, map: "professor_ibfk_1")
 
   @@index([usuario_id], map: "usuario_id")
 }
-
 
 model tfc {
   id            Int       @id @default(autoincrement())
@@ -97,7 +83,6 @@ model tfc {
   aluno_id      String    @db.VarChar(300)
   orientador_id String    @db.VarChar(300)
   usuario_id    Int
-  banca         banca[]
   login         login     @relation(fields: [usuario_id], references: [id_login], onDelete: Cascade, onUpdate: Restrict, map: "tfc_ibfk_3")
 
   @@index([aluno_id], map: "aluno_id")

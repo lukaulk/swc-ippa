@@ -80,7 +80,7 @@ const Login = () => {
         if (session.sucess === true) {
             router.push("cursos/#session_started")
         } else {
-            router.push("login/")
+           console.log("Erro ao iniciar a sessão automáticamente")
         }
     }, [session, router]);
 
@@ -183,6 +183,9 @@ const Login = () => {
                         </Card>
                     </TabsContent>
                 </Tabs>
+                        <span className="text-gray-800 py-2 font-semibold text-sm w-[350px] cursor-pointer bg-gray-50 border border-gray-100" onClick={() =>{
+                                router.push('aluno/')
+                            }}>És Aluno do IPPA?, <span className="text-violet-600">Clique aqui para logar como aluno</span></span>
             </div>
         </div>
     );

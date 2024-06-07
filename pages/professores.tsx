@@ -6,7 +6,6 @@ import {
     TableBody,
     TableCaption,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
@@ -39,11 +38,14 @@ import { useSession } from "../utils/loginAuth";
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { profSchema, profFunc } from "../utils/profUtils";
 import AutoCloseAlert from "@/components/myui/AutoCloseAlert"
+import { useRouter } from 'next/navigation';
+
 
 export default function Orientadores() {
     const { data: sessionData } = useSession();
     const uid = sessionData ? sessionData.uid : 0;
-
+    const router = useRouter()
+    
     const [loading, setLoading] = useState(true);
     const [dataError, setDataError] = useState({ msg: "" });
     const [dadosProf, setDadosProf] = useState({ nome: "", descricao : ""});
@@ -88,8 +90,10 @@ export default function Orientadores() {
             setTimeout(() => setShowAlert(false), 5000);
 
             const data = await profFunc.findProf(uid);
+            alert("Foi cadastrado um novo professor !")
+            router.refresh()
             setProfs(data.data);
-
+            
         } catch (error: any) {
             console.log('Erro ao submeter os dados do Prof');
             try {

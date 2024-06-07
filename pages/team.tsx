@@ -93,6 +93,11 @@ export default function team() {
             }
         }
     };
+    
+    const acessPassword = (usuario: string, senha: string) => {
+        var acess = prompt(`Mudar a senha de ${usuario}\nMude a senha de "${senha}" para:`)
+        console.log(acess)
+    }
     return (
         <div className="flex flex-row w-full h-screen">
             <Nav />
@@ -132,9 +137,9 @@ export default function team() {
                                                     <Input type='text' name='senha' id='senha' onChange={teamMudado} value={teamData.senha}  className='w-[180px] uppercase border border-zinc-300 bg-zinc-100 hover:ring-violet-500 hover:ring-2' />
                                                     </Label>
                                                     <select name='categoria' id='categoria' onChange={selectTeamMudado} value={teamData.categoria} className="px-4 w-[150px]  py-2 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200  border-slate-400 border rounded-md" >
-                                                        <option>Professor/Orientador</option>
+                                                        <option>Coordenador do curso</option>
+                                                        <option>Secretário</option>
                                                         <option>Membro da banca</option>
-                                                        <option>Aluno</option>
                                                     </select>
                                             </div>
                                              <Button type="submit"  name="cadastrar" id="cadastrar" className="bg-violet-700 mt-4 text-white hover:bg-violet-800 text-center w-full" ><IconPlus stroke={"white"} className="w-4 mr-2 h-4 rounded-none" strokeWidth={3} /> Cadastar Utilizador</Button>
@@ -166,14 +171,14 @@ export default function team() {
                                     <TableRow key={index}>
                                         <TableCell className="font-bold">{index + 1}</TableCell>
                                         <TableCell>{team.usuario}</TableCell>
-                                        <TableCell>{team.categotia}</TableCell>
+                                        <TableCell>{team.categoria}</TableCell>
                                         <TableCell className="text-right">
                                         <Popover>
                                                 <PopoverTrigger asChild>
                                                     <Button className="text-black hover:bg-gray-100" ><IconDots className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Opções</Button>
                                                 </PopoverTrigger>
                                                 <PopoverContent className="mr-4 flex p-0 flex-col bg-white w-fit items-start">
-                                                <Button className="text-black hover:bg-gray-100 active:bg-zinc-300 w-full" ><IconLock className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Senha de acesso</Button>
+                                                <Button className="text-black hover:bg-gray-100 active:bg-zinc-300 w-full" onClick={()=>{ acessPassword(team.usuario, team.senha) }}><IconLock className="w-5 mr-2 h-5 rounded-none" strokeWidth={2}/> Senha de acesso</Button>
                                                     <Button className="text-black hover:bg-gray-100 active:bg-zinc-300 w-full" ><IconCursorText className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Renomear</Button>
                                                     <Button className="text-red-700 hover:bg-gray-100 active:bg-zinc-300 w-full" ><IconX className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Deletar</Button>
                                                 </PopoverContent>

@@ -10,7 +10,7 @@ interface SelectorProps {
 
 export default function Selector({ dados = [], onSelect, name, value: initialValues = [], unCheckable = false }: SelectorProps) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState<Array<{ id: number; nome?: string; titulo?: string }>>(initialValues);
+  const [value, setValue] = React.useState<Array<{ id: number; nome?: string; titulo?: string }>>([]);
   const [search, setSearch] = React.useState("");
 
   const filteredDados = dados.filter((d) => {
@@ -22,6 +22,7 @@ export default function Selector({ dados = [], onSelect, name, value: initialVal
     let newValue;
     if (unCheckable) {
       newValue = value.some(v => v.id === item.id) ? [] : [item];
+      setOpen(false);  // Fechar o menu de opções quando unCheckable = true
     } else {
       newValue = value.some(v => v.id === item.id)
         ? value.filter(v => v.id !== item.id)
@@ -73,7 +74,6 @@ export default function Selector({ dados = [], onSelect, name, value: initialVal
                     checked={value.some(v => v.id === d.id)}
                     onChange={(e) => handleSelect(d, e)}
                     className={"mr-2"}
-                    // Remova a verificação direta de checked para evitar marcações automáticas
                   />
                   {d.nome || d.titulo}
                 </li>

@@ -28,6 +28,21 @@ export const teamFunc = {
             return await response.json()
         } catch (err) { console.log(err);  }
        },
+       async editTeam(usuario: string, senha: string){
+        try {
+            const response = await fetch('api/team', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usuario: usuario, senha: senha })
+            });
+            console.log(response)
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(errorMessage);
+            }
+            return await response.json()
+        } catch (err) { console.log(err);  }
+       },
        async findTeam(uid: number){
         try {
             const response = await fetch(`api/team?usuario_id=${Number(uid)}`, {

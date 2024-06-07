@@ -74,8 +74,6 @@ export default function Pessoal() {
         const fetchDadosAluno = async () => {
             try {
                 const data = await alunoFunc.findAluno(uid);
-                console.log(data.data)
-
                 if (data.success === false) {
                     setError(data.error);
                 } else {

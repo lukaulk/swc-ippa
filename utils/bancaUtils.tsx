@@ -1,6 +1,4 @@
 // bancaUtils.ts
-import prisma from '../utils/prisma'
-
 import {  object, string } from 'zod';
 
 export const bancaSchema =  object({
@@ -8,7 +6,7 @@ export const bancaSchema =  object({
 })
 
 export interface IBancaFunc {
-    create(titulo_id: number, data: string, hora_inicio: string, hora_fim: string, local: string, presidente: number, vogal1: number, vogal2: number, tfc_id: number, usuario_id: number): Promise<any>;
+    create(data: string, hora_inicio: string, hora_fim: string, local: string, presidente: number, vogal1: number, vogal2: number, tfc_id: number, usuario_id: number): Promise<any>;
     find(uid: number): Promise<any>;
 }
 
@@ -42,14 +40,17 @@ export const BancaFunc: IBancaFunc = {
     },
     async find(uid) {
         try {
-            const banca = await prisma.banca.findUnique({
-                where: {
-                    id: uid
-                }
-            });
-            return banca;
+            const response = await fetch('api/banca?uid='+ uid, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            if (!response.ok || response.status === 404) {
+                throw new Error('Erro ao encontrar a Banca');
+            }
+
+            return await response.json();
         } catch (error) {
-            throw new Error(`Error ao buscar a banca: ${error}`);
+            throw new Error(`\nError ao buscar a banca: ${error}`);
         }
     }
 };
