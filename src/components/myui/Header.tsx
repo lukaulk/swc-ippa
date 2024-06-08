@@ -61,7 +61,7 @@ export default function Header(props: HProps) {
     var cat = document.querySelector("#categoria") !== null ? document.querySelector("#categoria").innerHTML = AnalyzeString(String(categoria)) : "ERR!"
   
   }, [])
-  return (<div className="flex flex-row w-full justify-center items-center bg-white border rounded-lg border-l-0  border-zinc-300 h-16 min-h-15 text-gray-950 relative">
+  return (<div className="flex flex-row w-full justify-center items-center bg-white rounded-lg  h-16 min-h-15 text-gray-950 relative headerBorder" >
   <h1 className="text-md text-violet-700 ml-6 font-semibold c">
     {props.content ? props.content : "Nome da Seção"}
   </h1>

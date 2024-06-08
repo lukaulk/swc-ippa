@@ -30,6 +30,8 @@ model aluno {
   curso      curso  @relation(fields: [curso_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "aluno_ibfk_1")
   login      login  @relation(fields: [usuario_id], references: [id_login], onDelete: Cascade, onUpdate: Restrict, map: "aluno_ibfk_2")
 
+  commits commits []
+
   @@index([curso_id], map: "curso_id")
   @@index([usuario_id], map: "aluno_ibfk_2")
 }
@@ -74,6 +76,27 @@ model professor {
   @@index([usuario_id], map: "usuario_id")
 }
 
+model commits {
+  id Int @id @default(autoincrement())
+  mensagem String @db.VarChar(200)
+  timestamp String @db.VarChar(10)
+  aluno_id Int
+  estadoTFC estadoTFC[]
+
+  aluno  aluno? @relation(fields: [aluno_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+}
+
+model estadoTFC {
+  id Int @id @default(autoincrement())
+  finalizado Boolean @default(false)
+  aprovado Boolean @default(false)
+  commits_id Int
+  tfc_id Int 
+
+  commits commits @relation(fields: [commits_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+  tfc tfc @relation(fields: [tfc_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "estado_tfc_ibfk_1")
+}
+
 model tfc {
   id            Int       @id @default(autoincrement())
   titulo        String?   @db.VarChar(200)
@@ -84,7 +107,7 @@ model tfc {
   orientador_id String    @db.VarChar(300)
   usuario_id    Int
   login         login     @relation(fields: [usuario_id], references: [id_login], onDelete: Cascade, onUpdate: Restrict, map: "tfc_ibfk_3")
-
+  estado estadoTFC[]
   @@index([aluno_id], map: "aluno_id")
   @@index([orientador_id], map: "orientador_id")
   @@index([usuario_id], map: "tfc_ibfk_3")

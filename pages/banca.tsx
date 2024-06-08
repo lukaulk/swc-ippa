@@ -25,7 +25,7 @@ DialogHeader,
 DialogTitle,
 DialogTrigger,
 } from "@/components/ui/dialog"
-import { IconCursorText, IconDots, IconFileTypePdf, IconFilter, IconExclamationCircle, IconPlus, IconSearch, IconX, IconStarHalf } from "@tabler/icons-react"
+import { IconCursorText, IconDots, IconFileTypePdf, IconFilter, IconExclamationCircle, IconPlus, IconSearch, IconX, IconStarHalf, IconPdf } from "@tabler/icons-react"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -37,8 +37,8 @@ import Selector from "@/components/myui/Selector"
 import { tfcFunc } from "../utils/tfcUtils";
 import { BancaFunc, bancaSchema } from '../utils/bancaUtils'
 import { useRouter } from 'next/navigation'
-import { alunoSchema, alunoFunc } from "../utils/alunoUtils";
-
+import { alunoFunc } from "../utils/alunoUtils";
+import PDFGenerator from "@/components/myui/Ata"
 export default function Banca(){
     const { data: sessionData } = useSession();
     const uid = sessionData ? sessionData.uid : 0;
@@ -173,6 +173,7 @@ export default function Banca(){
     return (
         <div className="flex flex-row w-full h-screen">
             <Nav></Nav>
+           
             <div className="flex-1 flex flex-col h-screen bg-gray-100">
                 <Header content="Banca"  />
                 <section className="w-full max-w-[1200px] bg-gray-50 border mt-1 border-l-0 border-yellow-500 h-screen text-gray-950">
@@ -281,7 +282,13 @@ export default function Banca(){
                                                     </div>
                                                     </DialogContent>
                                                 </Dialog>
-                                                    {/* <Button className="text-black hover:bg-gray-100 active:bg-zinc-300 w-full" ><IconExclamationCircle className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Mais Informações</Button> */}
+                                                
+                                                    <Button className="text-black hover:bg-gray-100 active:bg-zinc-300 w-full" onClick={()=>{
+                                                        alert("Gerar relatório PDF!")
+                                                        return (
+                                                            <PDFGenerator />
+                                                        )
+                                                    }}><IconPdf className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Gerar Relatório (PDF)</Button>
                                                     <Button className="text-black hover:bg-gray-100 active:bg-zinc-300 w-full" ><IconCursorText className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Editar</Button>
                                                     <Button className="text-red-700 hover:bg-gray-100 active:bg-zinc-300 w-full" ><IconX className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Deletar</Button>
                                                 </PopoverContent>
