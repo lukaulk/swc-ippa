@@ -1,9 +1,7 @@
 import { z } from 'zod';
 
 export const commitSchema = z.object({
-    mensagem: z.string().min(3, { message: "O campo deve conter pelo menos 3 caracteres" }).regex(/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$/, { message: "Apenas são aceitas letras e espaços" }),
-    timestamp: z.string().min(1, { message: "Timestamp é obrigatório" }), // Adicionado validação de timestamp
-    uid: z.number().int().positive({ message: "UID inválido" }), // Adicionado validação de UID
+    mensagem: z.string().min(3, { message: "O campo deve conter pelo menos 3 caracteres" }).regex(/^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$/, { message: "Apenas são aceitas letras e espaços" })
 });
 
 interface ICommits {
