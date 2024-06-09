@@ -47,6 +47,7 @@ model banca {
   vogal2      Int
   tfc_id      Int
   usuario_id  Int
+  nota nota[]
 
   @@index([tfc_id], map: "tfc_id")
   @@index([usuario_id], map: "usuario_id")
@@ -83,11 +84,12 @@ model commits {
   aluno_id Int
   estadoTFC estadoTFC[]
 
-  aluno  aluno? @relation(fields: [aluno_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+  aluno  aluno @relation(fields: [aluno_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
 }
 
 model estadoTFC {
   id Int @id @default(autoincrement())
+  accao String
   finalizado Boolean @default(false)
   aprovado Boolean @default(false)
   commits_id Int
@@ -97,6 +99,16 @@ model estadoTFC {
   tfc tfc @relation(fields: [tfc_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "estado_tfc_ibfk_1")
 }
 
+model nota{
+  id Int @id @default(autoincrement())
+  tfc_id Int
+  banca_id Int 
+  valor Int 
+
+  tfc tfc @relation(fields: [tfc_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+  banca banca @relation(fields: [banca_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
+
+}
 model tfc {
   id            Int       @id @default(autoincrement())
   titulo        String?   @db.VarChar(200)
@@ -106,8 +118,11 @@ model tfc {
   aluno_id      String    @db.VarChar(300)
   orientador_id String    @db.VarChar(300)
   usuario_id    Int
-  login         login     @relation(fields: [usuario_id], references: [id_login], onDelete: Cascade, onUpdate: Restrict, map: "tfc_ibfk_3")
   estado estadoTFC[]
+  mota nota[]
+
+
+  login         login     @relation(fields: [usuario_id], references: [id_login], onDelete: Cascade, onUpdate: Restrict, map: "tfc_ibfk_3")
   @@index([aluno_id], map: "aluno_id")
   @@index([orientador_id], map: "orientador_id")
   @@index([usuario_id], map: "tfc_ibfk_3")
