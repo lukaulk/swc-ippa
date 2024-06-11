@@ -1,9 +1,13 @@
 import React from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { useRouter } from 'next/navigation'
 
 const RelatorioAta: React.FC = () => {
+  const router = useRouter()
+
   const generatePDF = async () => {
+
     const element = document.getElementById('pdf-content');
     if (element) {
       const canvas = await html2canvas(element);
@@ -13,18 +17,21 @@ const RelatorioAta: React.FC = () => {
       const pdf = new jsPDF('p', 'px', 'a4');
 
       // Adicione a imagem ao PDF com o tamanho ajustado
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
+      const imgWidth = canvas.width - 100;
+      const imgHeight = canvas.height - 100;
       pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
 
       // Salve o PDF
       pdf.save('relatorio_ata.pdf');
+      router.push('/inicio')
     }
   };
 
+
   return (
     <div className="flex items-center justify-center">
-      <div id="pdf-content" style={{ padding: '20px', background: 'white', width: '595px', height: '842px' }}>
+      <button onClick={generatePDF} className={'fixed right-0 top-0'}>Imprimir Relatório da ATA (PDF)</button>
+      <div id="pdf-content" style={{ padding: '20px', background: 'white', width: '595px', height: '842px' , border: '1px solid black', boxShadow: '0px 2px 4px 0px rgba(0,0,0,0.051)'}}>
         <center>MINISTÉRIO DA EDUCAÇÃO</center>
         <center>INSTITUTO POLITÉCNICO PRIVADO ANHERC</center>
         <center>ÁREA DE FORMAÇÃO DE INFORMÁTICA</center>
@@ -53,7 +60,6 @@ const RelatorioAta: React.FC = () => {
         <hr />
         <p>MIGUEL FAUSTINO ANDRÉ</p>
       </div>
-      <button onClick={generatePDF}>Gerar PDF</button>
     </div>
   );
 };

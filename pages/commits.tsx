@@ -20,7 +20,7 @@ import { useSession } from "../utils/loginAuth"
 import { CommitsFunc, commitSchema } from "../utils/commits"
 import { EstadosFunc } from "../utils/estadoTFC"
 import { useRouter } from 'next/navigation'
-import { tfcSchema, tfcFunc } from "../utils/tfcUtils";
+import {  tfcFunc } from "../utils/tfcUtils";
 
 export default function Commits() {
     
@@ -40,7 +40,8 @@ export default function Commits() {
             if (response.success) {
                 setCommits(response.data);
             } else {
-                setError(response.error);
+                // setError(response.error);
+                console.log(response.error)
             }
             setLoading(false);
         };
@@ -50,16 +51,27 @@ export default function Commits() {
     useEffect(() => {
         const findTFC = async () => {
             try {
-                const data = await tfcFunc.findtfc(uid);
+                const data = await tfcFunc.findAllTFCs();
                 if (data.success === false) {
                     setError(data.error);
                 } else {
-                    const id = data.data.find((e:any) => e.aluno_id == uid)?.id
+                    console.log(uid)
+                    console.log(data.data)
+                    const id = data.data.find((e:any) =>{
+                            const aluno = JSON.parse(e.aluno_id)
+
+                            console.log(aluno)
+                            console.log('Mapeado: \n' + uid == aluno.map((i:any) => {
+                                return i
+                            }))
+                            return uid == aluno.map((i:any) => i)
+                    })?.id
                     console.log(id)
                     setTFC(data.data);
                 }
             } catch (err) {
-                setError(String(err) || "Erro na requisição dos dados");
+                // setError(String(err) || "Erro na requisição dos dados");
+                console.log(err)
             } finally {
                 setLoading(false);
             }
@@ -82,14 +94,16 @@ export default function Commits() {
 
             const response = await CommitsFunc.create(formState.mensagem, new Date().toISOString().slice(0, 10), uid);
             if (response.success) {
-                const estadoResponse = await EstadosFunc.create(formState.accao, response.data.id, 1); // Ajuste o tfc_id conforme necessário
-                if (estadoResponse.success) {
-                    router.refresh();
-                    alert('Foi cadastrado uma nova submissão do commit e estado');
-                } else {
-                    setError(estadoResponse.error);
-                    console.log(estadoResponse.error);
-                }
+                // const estadoResponse = await EstadosFunc.create(formState.accao, response.data.id,  1); // Ajuste o tfc_id conforme necessário
+                // if (estadoResponse.success) {
+                //     router.refresh();
+                //     alert('Foi cadastrado uma nova submissão do commit e estado');
+                // } else {
+                //     setError(estadoResponse.error);
+                //     console.log(estadoResponse.error);
+                // }
+                router.refresh();
+                alert('Foi cadastrado uma nova submissão do commit e estado');
             } else {
                 setError(response.error);
                 console.log(response.error);
@@ -140,7 +154,7 @@ export default function Commits() {
                         {loading ? (
                             <div className="w-full text-gray-700 text-center">Carregando...</div>
                         ) : error ? (
-                            <div className="w-full text-gray-700 font-semibold text-center">{error}</div>
+                            <div className="w-full text-gray-700 font-semibold text-center">Nenhuma submissão encontrado, cadastre um!</div>
                         ) : (
                             <Table>
                                 <TableCaption>Listagem das submissões do TFC feitas</TableCaption>

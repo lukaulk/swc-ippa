@@ -38,7 +38,10 @@ import { tfcFunc } from "../utils/tfcUtils";
 import { BancaFunc, bancaSchema } from '../utils/bancaUtils'
 import { useRouter } from 'next/navigation'
 import { alunoFunc } from "../utils/alunoUtils";
+import Link from "next/link"
 import PDFGenerator from "@/components/myui/Ata"
+
+
 export default function Banca(){
     const { data: sessionData } = useSession();
     const uid = sessionData ? sessionData.uid : 0;
@@ -282,13 +285,14 @@ export default function Banca(){
                                                     </div>
                                                     </DialogContent>
                                                 </Dialog>
-                                                
+                                                    <Link href="/ata">
                                                     <Button className="text-black hover:bg-gray-100 active:bg-zinc-300 w-full" onClick={()=>{
                                                         alert("Gerar relatório PDF!")
                                                         return (
                                                             <PDFGenerator />
                                                         )
                                                     }}><IconPdf className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Gerar Relatório (PDF)</Button>
+                                                    </Link>
                                                     <Button className="text-black hover:bg-gray-100 active:bg-zinc-300 w-full" ><IconCursorText className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Editar</Button>
                                                     <Button className="text-red-700 hover:bg-gray-100 active:bg-zinc-300 w-full" ><IconX className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Deletar</Button>
                                                 </PopoverContent>
