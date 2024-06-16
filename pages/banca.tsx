@@ -57,8 +57,10 @@ export default function Banca(){
         vogal1: "", 
         vogal2: "" })
 
-        const [listaBanca, setListaBanca] = useState<any[]>([]);
         const router = useRouter()
+        const [listaBanca, setListaBanca] = useState<any[]>([]);
+        const [searchTerm, setSearchTerm] = useState('');
+        const [bancaFiltro, setBancaFiltro] = useState([]);
         const [tfc, setTFC] = useState({ id: ""})
         const [loading, setLoading] = useState(false);
         const [error, setError] = useState("");
@@ -127,10 +129,10 @@ export default function Banca(){
             };
             fetchDadosAluno();
         }, [uid]);
+
         const selectItems = (items: Array<{ id: number; nome?: string; titulo?: string }>, e: React.ChangeEvent<HTMLInputElement>) =>{
             const { name } = e.target;
             setBanca(banca => ({ ...banca, [name]: String(items[0]?.id) }));
-            console.log(String(items[0]?.id))
         }
 
     const bancaMudado = (e: ChangeEvent<HTMLInputElement>) => {
@@ -145,7 +147,8 @@ export default function Banca(){
                 if (data.success === false) {
                     setErrorBanca(data.error);
                 } else {
-                    setListaBanca(data.data);
+                    setListaBanca(data.data)
+                    setBancaFiltro(data.data)
                 }
             } catch (err) {
                 console.log("Erro ao requisitar dados da banca " + err)
@@ -173,6 +176,11 @@ export default function Banca(){
             }
           }
     }
+    const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value);
+    };
+
+    
     return (
         <div className="flex flex-row w-full h-screen">
             <Nav></Nav>
@@ -181,7 +189,7 @@ export default function Banca(){
                 <Header content="Banca"  />
                 <section className="w-full max-w-[1200px] bg-gray-50 border mt-1 border-l-0 border-yellow-500 h-screen text-gray-950">
                     <header className="flex mt-4 ml-6 gap-2">
-                                <Input type="search" placeholder="Pesquisar Bancas..." className="w-[300px] border-slate-400 focus:outline-violet-400 border placeholder:text-slate-500 bg-slate-200" />
+                                <Input type="search" placeholder="Pesquisar Bancas..." className="w-[300px] border-slate-400 focus:outline-violet-400 border placeholder:text-slate-500 bg-slate-200" onChange={handleSearch}/>
                                 <Button className="mb-2 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" ><IconSearch stroke={"white"} className="w-4 mr-2 h-4 rounded-none" strokeWidth={3} /> Pesquisar</Button>
                             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                                 <DialogTrigger asChild>

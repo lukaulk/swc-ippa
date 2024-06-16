@@ -190,7 +190,7 @@ export default function TFC() {
                 return tfc.titulo.toLowerCase().includes(searchTerm.toLowerCase())
             }) 
         }
-        if (selectedItems !== null) {
+        if (selectedItems) {
             console.log('s:' + selectedItems)
             filtered = filtered.filter((aluno: any) =>{ 
                 return aluno.curso_id === selectedItems 
@@ -327,10 +327,7 @@ export default function TFC() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody className="w-full">
-                                {String(listaTFC.length)}
                                  {filteredTFC.length > 0 ? filteredTFC.map((d:any, index:number) => (
-                                     
-                                    // {listaTFC.map((d: any, index: number) => (
                                         <TableRow key={index}>
                                             <TableCell className="font-bold">{index + 1}</TableCell>
                                             <TableCell>{d.titulo}</TableCell>
