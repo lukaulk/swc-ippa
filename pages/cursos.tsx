@@ -35,6 +35,7 @@ import { Label } from "@/components/ui/label"
 import { cursoFunctions, cursoSchema } from "../utils/cursoUtils"
 import { useSession } from "../utils/loginAuth"
 import AutoCloseAlert from "@/components/myui/AutoCloseAlert"
+import { useRouter } from 'next/navigation';
 
 export default function Cursos() {
     const { data: sessionData } = useSession();
@@ -48,7 +49,7 @@ export default function Cursos() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [refresh, setRefresh] = useState(false)
-    const [editMode, setEditMode] = useState(false)
+    const router = useRouter()
     
     useEffect(() => {
         const fetchDadosCurso = async () => {
@@ -97,8 +98,8 @@ export default function Cursos() {
 
     const deleteCurso = async (id: number) => {
         await cursoFunctions.deleteCurso(id)
-        setRefresh(true)
-        setTimeout(() => setRefresh(false), 5000);
+        alert('Curso eliminado com sucesso!')
+        router.refresh()
     }
 
     return (
@@ -185,7 +186,7 @@ export default function Cursos() {
                                     {cursos.map((curso: any, index: number) => (
                                         <TableRow key={index}>
                                             <TableCell className="font-bold">{index + 1}</TableCell>
-                                            <TableCell contentEditable={editMode}>{curso.nome}</TableCell>
+                                            <TableCell>{curso.nome}</TableCell>
                                             <TableCell >{curso.descricao}</TableCell>
                                             <TableCell className="text-right">
                                                 <Popover>
@@ -195,16 +196,9 @@ export default function Cursos() {
                                                         </Button>
                                                     </PopoverTrigger>
                                                     <PopoverContent className="mr-4 flex p-0 flex-col bg-white w-fit items-start">
-                                                        <Button className="text-black hover:bg-gray-100 active:bg-zinc-300 w-full" >
-                                                            <IconCursorText className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} onClick={()=>{
-                                                                   setEditMode(true);
-                                                            }}/> Renomear
-                                                        </Button>
-                                                        <Button className="text-red-700 hover:bg-gray-100 active:bg-zinc-300 w-full" onClick={async () => {
-                                                            console.log(cursos[index])
-                                                            await deleteCurso(curso.id)
-                                                            // cursos.splice(cursos.indexOf(index), 1)
-                                                        }} >
+                                                            <Button className="text-red-700 hover:bg-gray-100 active:bg-zinc-300 w-full" onClick={async () => {
+                                                                await deleteCurso(curso.id)
+                                                            }} >
                                                             <IconX className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Deletar
                                                         </Button>
                                                     </PopoverContent>

@@ -27,21 +27,38 @@ const RelatorioAta: React.FC = () => {
     }
   };
 
+  const ataData = {
+        curso : 'Informática',
+        titulo: 'Sistema web Lukau',
+        data: '02/03/2023',
+        hi: '10:02',
+        hf: '02:21',
+        local: 'lianda',
+        aluno: ['Daniel Lingua', 'Matola Jonas'],
+        orientador: 1,
+        banca: ['presidente', 'vogal1', 'vogal2'],
+        valor: 20
+  }
 
   return (
     <div className="flex items-center justify-center">
-      <button onClick={generatePDF} className={'fixed right-0 top-0'}>Imprimir Relatório da ATA (PDF)</button>
-      <div id="pdf-content" style={{ padding: '20px', background: 'white', width: '595px', height: '842px' , border: '1px solid black', boxShadow: '0px 2px 4px 0px rgba(0,0,0,0.051)'}}>
+      <button onClick={generatePDF} className={'fixed right-0 top-0 px-5 py-2'}>Imprimir Relatório da ATA (PDF)</button>
+      <div id="pdf-content" style={{ padding: '22px', background: 'white', width: '585px', height: '842px' , border: '1px solid black', boxShadow: '0px 2px 4px 0px rgba(0,0,0,0.051)'}}>
         <center>MINISTÉRIO DA EDUCAÇÃO</center>
         <center>INSTITUTO POLITÉCNICO PRIVADO ANHERC</center>
-        <center>ÁREA DE FORMAÇÃO DE INFORMÁTICA</center>
+        <center>ÁREA DE FORMAÇÃO DE  {ataData.curso}</center>
         <center>CURSO: TÉCNICO DE INFORMÁTICA</center>
         <br />
         <center><b>ATA DO TRABALHO DE FIM DO CURSO</b></center>
-        <center><b>TÍTULO DO SISTEMA OU PROJECTO APRESENTADO</b></center>
+        <center><b>{ataData.titulo.toUpperCase()}</b></center>
         <br />
         <p>
-          Aos 28 do mês de Março de 2024, em LUANDA às 07 horas, na sala 13, Do Instituto Politécnico Privado Anhcer, realizou-se a sessão pública de defesa de trabalho de fim do curso de técnico de informática, o (a) estudante <span style={{ color: 'red' }}>PAULO MIGUEL ALFREDO KIALA</span>, sob a orientação de BERNADO ANTÓNIO MARTINS, que teve como o tema “SISTEMA DE GESTÃO ESCOLAR”, a comissão examinadora, composta por ALBETO JOÃO, PEDRO MARTINS E MIGUEL AFONSO, mediante a apresentação e defesa do trabalho, obteve <span style={{ color: 'red' }}>16 valores</span>
+          Aos 28 do mês de Março de 2024, em Luanda às {ataData.hi} horas, no (a) {ataData.local}, Do Instituto Politécnico Privado Anherc,
+           realizou-se a sessão pública de defesa de trabalho de fim do curso de técnico de {ataData.curso},
+           o (a) estudante <span style={{ color: 'red' }}>{ataData.aluno[0]}</span>, sob a orientação de 
+           {ataData.orientador}, que teve como o tema “{ataData.titulo}”, a comissão examinadora,
+            composta por {ataData.banca[0]}, ataData.banca[1] E ataData.banca[2], mediante a apresentação e defesa do trabalho,
+             obteve <span style={{ color: 'red' }}>{ataData.valor} valores</span>
         </p>
         <br />
         <p><b>Banca examinadora:</b></p>
@@ -58,7 +75,6 @@ const RelatorioAta: React.FC = () => {
         <br />
         <p>Secretário(a)</p>
         <hr />
-        <p>MIGUEL FAUSTINO ANDRÉ</p>
       </div>
     </div>
   );

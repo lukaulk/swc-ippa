@@ -28,17 +28,19 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-
 import { useSession } from "../utils/loginAuth";
 import { cursoFunctions } from "../utils/cursoUtils";
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { alunoSchema, alunoFunc } from "../utils/alunoUtils";
-import AutoCloseAlert from "@/components/myui/AutoCloseAlert"
+import AutoCloseAlert from "@/components/myui/AutoCloseAlert";
+import FormBox from '@/components/myui/FormBox';
+import { useRouter } from 'next/navigation'
 
 export default function Pessoal() {
     const { data: sessionData } = useSession();
     const uid = sessionData ? sessionData.uid : 0;
 
+    const router = useRouter()
     const [curso, setCursos] = useState<any[]>([]);  
     const [loading, setLoading] = useState(true);
     const [errorCrs, setErrorCrs] = useState("");
@@ -47,21 +49,21 @@ export default function Pessoal() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [error, setError] = useState("");
     const [showAlert, setShowAlert] = useState(false);
-    const [alunos, setAlunos] = useState<any[]>([]); 
+    const [alunos, setAlunos] = useState<any[]>([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredAlunos, setFilteredAlunos] = useState<any[]>([]);
+    const [selectedCurso, setSelectedCurso] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchDadosCurso = async () => {
             try {
                 const data = await cursoFunctions.findCurso(uid);
-                console.log(data.data)
                 if (data.success === false) {
                     setErrorCrs(String(data.error));
-                    console.log("Erro ao buscar os cursos!");
                 } else {
                     setCursos(data.data);
                 }
             } catch (err) {
-                console.log(err);
                 setErrorCrs(String(err));
             } finally {
                 setLoading(false);
@@ -78,9 +80,9 @@ export default function Pessoal() {
                     setError(data.error);
                 } else {
                     setAlunos(data.data);
+                    setFilteredAlunos(data.data);
                 }
             } catch (err) {
-                console.log(err);
                 setError(String(err) || "Erro na requisição dos dados");
             } finally {
                 setLoading(false);
@@ -89,6 +91,23 @@ export default function Pessoal() {
         fetchDadosAluno();
     }, [uid]);
 
+    useEffect(() => {
+        filterAlunos();
+    }, [searchTerm, selectedCurso]);
+
+    const filterAlunos = () => {
+        let filtered = alunos;
+        if (searchTerm) {
+            filtered = filtered.filter(aluno =>
+                aluno.nome.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+        }
+        if (selectedCurso !== null) {
+            filtered = filtered.filter(aluno => aluno.curso_id === selectedCurso);
+        }
+        setFilteredAlunos(filtered);
+    };
+
     const alunoMudado = (e: ChangeEvent<HTMLInputElement>) => {
         setDadosAluno({ ...dadosAluno, [e.target.name]: e.target.value });
     };
@@ -96,36 +115,38 @@ export default function Pessoal() {
     const selectCursoMudado = (e: ChangeEvent<HTMLSelectElement>) => {
         const cursoId = Number(e.target.value);
         setDadosAluno({ ...dadosAluno, curso_id: cursoId });
+        setSelectedCurso(cursoId);
     };
 
     const alunoSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
             alunoSchema.parse(dadosAluno);
-            const dados = await alunoFunc.createAluno(dadosAluno.nome, Number(dadosAluno.curso_id), dadosAluno.telefone, dadosAluno.bi, Number(uid));
+            await alunoFunc.createAluno(dadosAluno.nome, Number(dadosAluno.curso_id), Number(dadosAluno.telefone), dadosAluno.bi, Number(uid));
 
             setIsDialogOpen(false);
             setShowAlert(true);
             setTimeout(() => setShowAlert(false), 5000);
 
+            
             const data = await alunoFunc.findAluno(uid);
             setAlunos(data.data);
+            filterAlunos();
         } catch (error: any) {
-            try {
-                setDataError({
-                    msg: JSON.parse(error)[0].message
-                });
-            } catch (err) {
-                console.log('Erro ao efectuar as operações\n', err);
-            }
+            setDataError({ msg: JSON.parse(error)[0].message });
         }
     };
 
     const buscaAlunos = async () => {
         const dados = await alunoFunc.findAluno(uid);
-        console.log(dados);
+        setAlunos(dados.data);
+        filterAlunos();
     }
-    
+
+    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value);
+    };
+
     return (
         <div className="flex flex-row w-full h-screen">
             <Nav />
@@ -141,7 +162,13 @@ export default function Pessoal() {
                     )}
                     <div className="flex justify-between">
                         <div className="flex mt-4 ml-6 gap-2">
-                            <Input type="search" placeholder="Pesquisar Alunos..." className="w-[300px] border-slate-400 focus:outline-violet-400 border placeholder:text-slate-500 bg-slate-200" />
+                            <Input
+                                type="search"
+                                placeholder="Pesquisar Alunos..."
+                                className="w-[300px] border-slate-400 focus:outline-violet-400 border placeholder:text-slate-500 bg-slate-200"
+                                value={searchTerm}
+                                onChange={handleSearchChange}
+                            />
                             <Button className="mb-2 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" onClick={buscaAlunos}><IconSearch stroke={"white"} className="w-4 mr-2 h-4 rounded-none" strokeWidth={3} /> Pesquisar</Button>
                             <Popover>
                                 <PopoverTrigger asChild>
@@ -155,7 +182,8 @@ export default function Pessoal() {
                                     ) : errorCrs.trim() !== "" ? (
                                         <div className="w-full text-red-700 font-semibold text-center">{errorCrs}, Por favor entre em contato com o suporte do site</div>
                                     ) : (
-                                        <select className="px-4 py-2 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" onChange={selectCursoMudado} value={dadosAluno.curso_id}>
+                                        <select className="px-4 py-2 text-slate-800 hover:bg-slate-300 active:bg-slate-400 bg-slate-200" onChange={selectCursoMudado} value={selectedCurso ?? ''}>
+                                            <option value="">Todos os cursos</option>
                                             {curso.map((dados, index) => (
                                                 <option key={index} value={dados.id} title={dados.descricao}>{dados.nome}</option>
                                             ))}
@@ -226,11 +254,11 @@ export default function Pessoal() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody className="w-full">
-                                    {alunos.length > 0 ? alunos.map((aluno, index) => (
+                                    {filteredAlunos.length > 0 ? filteredAlunos.map((aluno, index) => (
                                         <TableRow key={index}>
                                             <TableCell className="font-bold">{index + 1}</TableCell>
                                             <TableCell>{aluno.nome}</TableCell>
-                                            <TableCell><span className="px-4 py-2 rounded-lg bg-zinc-50">{  curso.find(c => c.id == aluno.curso_id)?.nome || "Nenhum"}</span></TableCell>
+                                            <TableCell><span className="px-4 py-2 rounded-lg bg-zinc-50">{ curso.find(c => c.id == aluno.curso_id)?.nome || curso[0]?.nome}</span></TableCell>
                                             <TableCell>{aluno.telefone}</TableCell>
                                             <TableCell>{aluno.bi}</TableCell>
                                             <TableCell className="text-right">
@@ -239,7 +267,41 @@ export default function Pessoal() {
                                                         <Button className="text-black hover:bg-gray-100"><IconDots className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Opções</Button>
                                                     </PopoverTrigger>
                                                     <PopoverContent className="mr-4 flex p-0 flex-col bg-white w-fit items-start">
-                                                        <Button className="text-black hover:bg-gray-100 active:bg-zinc-300 w-full"><IconCursorText className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Renomear</Button>
+                                                    <Dialog>
+                                                        <DialogTrigger asChild>
+                                                        <Button className="text-black hover:bg-gray-100 active:bg-zinc-300 w-full" onClick={() => setDadosAluno(aluno)}><IconCursorText className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Renomear</Button>
+                                                        </DialogTrigger>
+                                                        <DialogContent className="bg-white sm:max-w-[625px]">
+                                                        <DialogHeader>
+                                                            <DialogTitle>
+                                                                Modificar Aluno                                                         
+                                                            </DialogTitle>
+                                                            <DialogDescription>
+                                                                Modificar dados do aluno
+                                                            </DialogDescription>
+                                                        </DialogHeader>
+                                                        <FormBox
+                                                            fields={{
+                                                                nome: { label: 'Nome Completo', type: 'text', value: aluno.nome },
+                                                                telefone: { label: 'Telefone', type: 'tel', value: aluno.telefone },
+                                                                bi: { label: 'BI', type: 'text', value: aluno.bi }
+                                                            }}
+                                                            actionButton={{
+                                                                label: 'Modificar Dados',
+                                                                onReturn: async (values: any) => {
+                                                                    try {
+                                                                        await alunoFunc.updateAluno(aluno.id, values.nome, aluno.curso_id, values.telefone, values.bi, uid);
+                                                                        alert('Foi modificado um registro!')
+                                                                        router.refresh()
+                                                                        await buscaAlunos();
+                                                                    } catch (error: any) {
+                                                                        setDataError({ msg: error.message });
+                                                                    }
+                                                                }
+                                                            }}
+                                                        />
+                                                        </DialogContent>
+                                                    </Dialog>
                                                         <Button className="text-red-700 hover:bg-gray-100 active:bg-zinc-300 w-full"><IconX className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Deletar</Button>
                                                     </PopoverContent>
                                                 </Popover>

@@ -32,3 +32,10 @@ input::placeholder, *::placeholder{
     border: none !important;
     box-shadow: 0px 0px 0px transparent !important;
 }
+
+hr{
+    display: block;
+    height: 1px solid black;
+    border: none !important;
+    width: 300px;
+}

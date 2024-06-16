@@ -72,20 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         } else {
             res.status(400).json({ success: false, error: "ID do aluno inválido" });
         }
-    } else if (req.method === 'PUT') {
-        const { id, nome, curso_id, telefone, bi } = req.body;
-
-        try {
-            const updatedAluno = await prisma.aluno.update({
-                where: { id: Number(id) },
-                data: { nome, curso_id, telefone, bi }
-            });
-
-            res.status(200).json({ success: true, data: updatedAluno });
-        } catch (error) {
-            console.error("Erro ao atualizar o aluno:", error);
-            res.status(500).json({ success: false, error: "Erro ao atualizar o aluno" });
-        }
+    
     } else {
         res.status(405).json({ success: false, error: "Método não permitido" });
     }
