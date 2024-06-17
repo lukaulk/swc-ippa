@@ -319,7 +319,7 @@ export default function Banca(){
                                                         )
                                                     }}><IconPdf className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Gerar Relatório (PDF)</Button>
                                                     </Link>
-                                                    <Button className="text-black hover:bg-gray-100 active:bg-zinc-300 w-full" ><IconCursorText className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Editar</Button>
+                                                    <Button className="text-black hover:bg-gray-100 active:bg-zinc-300 w-full" > Editar</Button>
                                                     <Button className="text-red-700 hover:bg-gray-100 active:bg-zinc-300 w-full" ><IconX className="w-5 mr-2 h-5 rounded-none" strokeWidth={2} /> Deletar</Button>
                                                 </PopoverContent>
                                             </Popover>

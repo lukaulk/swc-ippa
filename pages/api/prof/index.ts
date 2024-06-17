@@ -37,7 +37,7 @@ async function createProfessor(req: NextApiRequest, res: NextApiResponse) {
 
         res.status(201).json({ success: true, data: newProf });
     } catch (error) {
-        console.error('Erro ao adicionar um novo professor', error);
+        console.error('Erro ao adicionar um novo professor: \n' +  error);
         res.status(500).json({ success: false, error: 'Erro ao adicionar um novo professor' });
     }
 }
@@ -64,7 +64,7 @@ async function getProfessors(req: NextApiRequest, res: NextApiResponse) {
                 res.status(404).json({ success: false, error: 'Professor não encontrado' });
             }
         } catch (error) {
-            console.error('Erro ao buscar os professores:', error);
+            console.error('Erro ao buscar os professores:' + error);
             res.status(500).json({ success: false, error: 'Erro ao buscar os professores' });
         }
     } else {
