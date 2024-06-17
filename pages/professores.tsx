@@ -1,3 +1,6 @@
+import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
+import { useSession } from "../utils/loginAuth";
+import { useRouter } from 'next/navigation';
 import Nav from '@/components/myui/Nav'
 import "@/app/globals.css"
 import Header from "@/components/myui/Header"
@@ -29,11 +32,8 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
-import { useSession } from "../utils/loginAuth";
-import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { profSchema, profFunc } from "../utils/profUtils";
-import { useRouter } from 'next/navigation';
-import FormBox from "@/components/myui/FormBox"; // Importe o FormBox
+import { FormBox } from "@/components/myui/FormBox"; 
 
 export default function Orientadores() {
     const { data: sessionData } = useSession();
@@ -184,5 +184,5 @@ export default function Orientadores() {
                 </section>
             </div>
         </div>
-    )
+    );
 }
