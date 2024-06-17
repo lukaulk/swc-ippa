@@ -69,17 +69,17 @@ export default function Orientadores() {
         try {
             profSchema.parse(values);
             if (selectedProf) {
-                // Update existing professor
                 await profFunc.updateProf(selectedProf.id, values);
             } else {
-                // Create new professor
-                await profFunc.createProf({ ...values, usuario_id: uid });
+                const d =  await profFunc.createProf({ ...values, usuario_id: uid });
+                console.log(d)
+
             }
             const data = await profFunc.findProf(uid);
             setProfs(data.data);
-            setIsDialogOpen(false);
-            setSelectedProf(null);
-            setDadosProf({ nome: "", descricao: "", senha: "", coordenador: false, orientador: false, banca: false });
+            // setIsDialogOpen(false);
+            // setSelectedProf(null);
+            // setDadosProf({ nome: "", descricao: "", senha: "", coordenador: false, orientador: false, banca: false });
             alert("Operação realizada com sucesso!");
             router.refresh();
         } catch (error: any) {
@@ -119,7 +119,7 @@ export default function Orientadores() {
                                     </DialogHeader>
                                     <FormBox
                                         fields={{
-                                            nome: { label: 'Nome do Orientador', type: 'text', value: selectedProf ? selectedProf.nome : '' },
+                                            nome: { label: 'Nome do Professor', type: 'text', value: selectedProf ? selectedProf.nome : '' },
                                             descricao: { label: 'Descrição', type: 'text', value: selectedProf ? selectedProf.descricao : '' },
                                             senha: { label: 'Senha', type: 'password', value: selectedProf ? selectedProf.senha : '' },
                                             coordenador: { label: 'Coordenador', type: 'checkbox', value: selectedProf ? selectedProf.coordenador : false },

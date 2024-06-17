@@ -35,7 +35,7 @@ const FormBox: React.FC<FormBoxProps> = ({ fields, actionButton }) => {
       <div className="bg-white border border-gray-200 p-4 rounded-md">
         <form>
           {Object.entries(fields).map(([fieldName, fieldProps], index) => (
-            <div key={index} className="mb-4">
+            <div key={index} className={`mb-4 ${fieldProps.type === 'checkbox' ? 'flex gap-2' : ''}`}>
               <label className="block mb-1 text-sm font-semibold" htmlFor={fieldName}>
                 {fieldProps.label}
               </label>
