@@ -28,7 +28,7 @@ export default function Nav() {
     return (
         <nav className="w-[200px] text-left h-screen bg-violet-700 text-white rounded-none border-r border-violet-300 shadow-lg">
             <div className="flex w-full mt-4 flex-col text-left">
-                {(authType === 'administrador' || authType === 'coordenador' ) && (
+                {(authType === 'administrador' || authType === 'coordenador' || authType === 'secretario' ) && (
                     <>
                         <Link className="m-2 flex-1" href={"/inicio"}>
                             <Button className={`flex justify-start hover:bg-violet-800 hover:text-violet-100 text-[14px] rounded-md shadow-sm text-white w-full  transition-colors ${router.pathname === '/inicio' ? 'bg-violet-500' : ''}`}>

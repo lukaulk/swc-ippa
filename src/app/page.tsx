@@ -2,17 +2,15 @@
 import Link from "next/link"
 import { useRouter } from 'next/navigation';
 import { useSession } from "../../utils/loginAuth"
+
 export default function Home() {
   const router = useRouter()
   var session = useSession()
    
   if(session.sucess === true){
-    console.log(session.msg)
     router.push("inicio/#session_started")
   } else {
-    console.log(session.msg)
     router.push("login/")
-
   }
   return (
     <div className="flex flex-col w-full h-screen bg-zinc-50 ">

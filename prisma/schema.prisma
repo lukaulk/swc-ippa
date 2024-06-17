@@ -47,7 +47,7 @@ model banca {
   vogal2      Int
   tfc_id      Int
   usuario_id  Int
-  nota nota[]
+  nota nota[] 
 
   @@index([tfc_id], map: "tfc_id")
   @@index([usuario_id], map: "usuario_id")
@@ -72,10 +72,15 @@ model professor {
   nome       String? @db.VarChar(200)
   descricao  String? @db.VarChar(200)
   usuario_id Int?
+  senha      String? @db.VarChar(200)
+  coordenador Boolean @default(false)
+  orientador Boolean @default(false)
+  banca      Boolean @default(false)
   login      login?  @relation(fields: [usuario_id], references: [id_login], onDelete: Cascade, onUpdate: Restrict, map: "professor_ibfk_1")
 
   @@index([usuario_id], map: "usuario_id")
 }
+
 
 model commits {
   id Int @id @default(autoincrement())
