@@ -15,7 +15,6 @@ model login {
   email     String      @unique @db.VarChar(200)
   aluno     aluno[]
   curso     curso[]
-  professor professor[]
   team      team[]
   tfc       tfc[]
 }
@@ -66,19 +65,15 @@ model curso {
 
   @@index([usuario_id], map: "usuario_id")
 }
-
-model professor {
-  id         Int     @id @default(autoincrement())
-  nome       String? @db.VarChar(200)
-  descricao  String? @db.VarChar(200)
-  usuario_id Int?
-  senha      String? @db.VarChar(200)
-  coordenador Boolean @default(false)
-  orientador Boolean @default(false)
-  banca      Boolean @default(false)
-  login      login?  @relation(fields: [usuario_id], references: [id_login], onDelete: Cascade, onUpdate: Restrict, map: "professor_ibfk_1")
-
-  @@index([usuario_id], map: "usuario_id")
+model Professor {
+  id          Int     @id @default(autoincrement())
+  nome        String
+  descricao   String
+  senha       String
+  coordenador Boolean
+  orientador  Boolean
+  banca       Boolean
+  usuario_id  Int
 }
 
 

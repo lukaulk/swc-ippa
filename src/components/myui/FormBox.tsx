@@ -11,7 +11,7 @@ interface FormBoxProps {
   actionButton: { label: string; onReturn: (values: { [key: string]: any }) => void };
 }
 
-export const FormBox: React.FC<FormBoxProps> = ({ fields, actionButton }) => {
+const FormBox: React.FC<FormBoxProps> = ({ fields, actionButton }) => {
     const [formValues, setFormValues] = useState<{ [key: string]: string | boolean }>({});
   
     useEffect(() => {
@@ -71,4 +71,4 @@ export const FormBox: React.FC<FormBoxProps> = ({ fields, actionButton }) => {
       </div>
     );
   };
-  
+export default FormBox;

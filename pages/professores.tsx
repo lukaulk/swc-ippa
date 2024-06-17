@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import { profSchema, profFunc } from "../utils/profUtils";
-import { FormBox } from "@/components/myui/FormBox"; 
+import FormBox from "@/components/myui/FormBox"; 
 
 export default function Orientadores() {
     const { data: sessionData } = useSession();
