@@ -44,7 +44,7 @@ const FormBox: React.FC<FormBoxProps> = ({ fields, actionButton }) => {
                   id={fieldName}
                   name={fieldName}
                   type={fieldProps.type}
-                  className="border border-gray-300 rounded-md px-3 py-2 w-full focus:outline-none focus:ring focus:ring-indigo-500"
+                  className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring focus:ring-indigo-500"
                   checked={!!formValues[fieldName]}
                   onChange={(e) => handleChange(e, fieldName)}
                 />
