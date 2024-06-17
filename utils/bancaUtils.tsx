@@ -38,11 +38,10 @@ export const NotaFunc: INota = {
        },
        async get(banca_id){
         try{
-            const response = await fetch('api/nota?banca_id=' + banca_id, {
+            const response = await fetch(`api/nota?banca_id=${banca_id}`, {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
-                })
-            }) 
+            })
 
             if(!response.ok || response.status === 404){
                 throw new Error('Erro ao buscar a nota do tfc');

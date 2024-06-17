@@ -35,7 +35,7 @@ import { useState, useEffect, FormEvent, ChangeEvent } from "react"
 import { useSession } from "../utils/loginAuth"
 import Selector from "@/components/myui/Selector"
 import { tfcFunc } from "../utils/tfcUtils";
-import { BancaFunc, bancaSchema } from '../utils/bancaUtils'
+import { BancaFunc, bancaSchema, NotaFunc } from '../utils/bancaUtils'
 import { useRouter } from 'next/navigation'
 import { alunoFunc } from "../utils/alunoUtils";
 import Link from "next/link"
@@ -62,7 +62,7 @@ export default function Banca(){
         const [searchTerm, setSearchTerm] = useState('');
         const [bancaFiltro, setBancaFiltro] = useState([]);
         const [tfc, setTFC] = useState({ id: ""})
-        const {notaValor, setNotaValor} = useState(0)
+        const [notaValor, setNotaValor] = useState(0)
         const [loading, setLoading] = useState(false);
         const [error, setError] = useState("");
         const [prof, setProfs] = useState<any[]>([])
@@ -136,33 +136,32 @@ export default function Banca(){
             setBanca(banca => ({ ...banca, [name]: String(items[0]?.id) }));
         }
 
-    const bancaMudado = (e: ChangeEvent<HTMLInputElement>) => {
-        setBanca({ ...banca, [e.target.name]: e.target.value });
-    };
-    
-    
-    useEffect(() => {
-        const findBanca = async () => {
-            try {
-                const data = await BancaFunc.find(uid);
-                if (data.success === false) {
-                    setErrorBanca(data.error);
-                } else {
-                    setListaBanca(data.data)
-                    setBancaFiltro(data.data)
-                }
-            } catch (err) {
-                console.log("Erro ao requisitar dados da banca " + err)
-                setError(String(err) || "Erro na requisição dos dados");
-            } finally {
-                setLoading(false);
-            }
+        const bancaMudado = (e: ChangeEvent<HTMLInputElement>) => {
+            setBanca({ ...banca, [e.target.name]: e.target.value });
         };
-        findBanca();
-    }, [uid]); 
+        
+        useEffect(() => {
+            const findBanca = async () => {
+                try {
+                    const data = await BancaFunc.find(uid);
+                    if (data.success === false) {
+                        setErrorBanca(data.error);
+                    } else {
+                        setListaBanca(data.data)
+                        setBancaFiltro(data.data)
+                    }
+                } catch (err) {
+                    console.log("Erro ao requisitar dados da banca " + err)
+                    setError(String(err) || "Erro na requisição dos dados");
+                } finally {
+                    setLoading(false);
+                }
+            };
+            findBanca();
+        }, [uid]); 
 
     const notaInput = (e: ChangeEvent<HTMLInputElement>) =>{
-          setNotaValor(e.target.valor)
+          setNotaValor(Number(e.target.value))
     }
     const notaSubmit = async (tfc_id: number, banca_id: number) => {
         try {
