@@ -62,6 +62,7 @@ export default function Banca(){
         const [searchTerm, setSearchTerm] = useState('');
         const [bancaFiltro, setBancaFiltro] = useState([]);
         const [tfc, setTFC] = useState({ id: ""})
+        const {notaValor, setNotaValor} = useState(0)
         const [loading, setLoading] = useState(false);
         const [error, setError] = useState("");
         const [prof, setProfs] = useState<any[]>([])
@@ -158,8 +159,24 @@ export default function Banca(){
             }
         };
         findBanca();
-    }, [uid]);
+    }, [uid]); 
 
+    const notaInput = (e: ChangeEvent<HTMLInputElement>) =>{
+          setNotaValor(e.target.valor)
+    }
+    const notaSubmit = async (tfc_id: number, banca_id: number) => {
+        try {
+            await NotaFunc.set(tfc_id, banca_id, notaValor);
+            alert("Nota adicionada com sucesso!");
+        } catch (err: any) {
+            try {
+                setErrorBanca(JSON.parse(String(err))[0].message || "Erro ao cadastrar a nota");
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
+    
     const bancaSubmit = async (e: FormEvent<HTMLFormElement>) =>{
          e.preventDefault()
           try {
@@ -287,9 +304,11 @@ export default function Banca(){
                                                     <div className="flex">
                                                         <Label>
                                                             Nota 
-                                                            <Input type='number' className='flex border border-zinc-400 bg-zinc-100 hover:ring-violet-500 hover:ring-2' max={20} min={0}/>
+                                                            <Input type='number' className='flex border border-zinc-400 bg-zinc-100 hover:ring-violet-500 hover:ring-2' max={20} min={0} onChange={notaInput} />
                                                         </Label>
-                                                     <Button type="submit" className="bg-violet-700  text-white hover:bg-violet-800 text-center" >Aplicar Nota</Button>
+                                                     <Button type="submit" className="bg-violet-700  text-white hover:bg-violet-800 text-center" onClick={()=>{
+                                                        notaSubmit(Number(d.tfc_id), Number(d.id))
+                                                     }} >Aplicar Nota</Button>
                                                     </div>
                                                     </DialogContent>
                                                 </Dialog>

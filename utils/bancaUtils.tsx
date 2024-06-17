@@ -10,6 +10,50 @@ export interface IBancaFunc {
     find(uid: number): Promise<any>;
 }
 
+export interface INota{
+    set(tfc_id: number, banca_id: number, valor: number): Promise<any>;
+    get(banca_id: number): Promise<any>;
+}
+
+export const NotaFunc: INota = {
+       async set(tfc_id, banca_id, valor){
+        try{
+            const response = await fetch('api/nota', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    tfc_id,
+                    banca_id,
+                    valor
+                })
+            }) 
+
+            if(!response.ok || response.status === 404){
+                throw new Error('Erro ao classificar nota ao tfc');
+            }
+            return await response.json()
+        } catch(err){
+            throw new Error(`Erro ao fazer a requisição na classificação da nota: ${err}`);
+        }
+       },
+       async get(banca_id){
+        try{
+            const response = await fetch('api/nota?banca_id=' + banca_id, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+                })
+            }) 
+
+            if(!response.ok || response.status === 404){
+                throw new Error('Erro ao buscar a nota do tfc');
+            }
+            return await response.json()
+        } catch(err){
+            throw new Error(`Erro ao fazer a busca da classificação da nota: ${err}`);
+        }
+       }
+}
+
 export const BancaFunc: IBancaFunc = {
     async create(data, hora_inicio, hora_fim, local, presidente, vogal1, vogal2, tfc_id, usuario_id) {
         try {

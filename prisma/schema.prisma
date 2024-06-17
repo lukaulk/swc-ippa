@@ -103,7 +103,7 @@ model nota{
   id Int @id @default(autoincrement())
   tfc_id Int
   banca_id Int 
-  valor Int 
+  valor Int @default(0)
 
   tfc tfc @relation(fields: [tfc_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
   banca banca @relation(fields: [banca_id], references: [id], onDelete: Cascade, onUpdate: Restrict)
