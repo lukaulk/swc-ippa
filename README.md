@@ -1,4 +1,4 @@
-# Controle e Acompanhamento de TFCs e Estágio Curricular 🚀
+# Sistema Web Controle e Acompanhamento de TFCs 🚀
 
 Bem-vindo ao repositório do Sistema Web para Controle e Acompanhamento de Trabalhos de Conclusão de Curso (TFCs) e Estágio Curricular! Este projeto utiliza tecnologias modernas para oferecer uma plataforma eficiente e amigável para gerenciar as atividades acadêmicas.
 
@@ -34,16 +34,16 @@ Explore este sistema para simplificar e aprimorar o acompanhamento das atividade
 
 1. **Clone o Repositório:**
    ```bash
-   git clone https://github.com/lukaulk/swc-tfc-esc-ippa.git
+   git clone https://github.com/lukaulk/swc-ippa.git
    ```
 
 2. **Instale as Dependências:**
    ```bash
-   cd swc-tfc-esc-ippa
+   cd swc-tfc
    npm install
    ```
 
-3. **Configure o Ambiente:**
+3. **Configure o Ambiente:** (Não é necessário)
    - Renomeie o arquivo `.env.example` para `.env` e configure as variáveis de ambiente necessárias.
 
 4. **Execute a Aplicação:**
@@ -63,5 +63,5 @@ Este projeto é licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE
 
 ---
 
-Aproveite o Controle e Acompanhamento de TFCs e Estágio Curricular! 🎓✨
+Aproveite o Controle e Acompanhamento de TFCs! 🎓✨
 "#MD" 
